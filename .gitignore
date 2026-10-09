@@ -1,0 +1,72 @@
+# ─── Node ────────────────────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+.pnpm-store/
+
+# ─── Next.js ─────────────────────────────────────────────────────────────────
+apps/web/.next/
+apps/web/out/
+apps/web/.vercel/
+
+# ─── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+dist/
+*.egg-info/
+.eggs/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# ─── Environment & Secrets ───────────────────────────────────────────────────
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# NEVER commit .env — only .env.example is allowed in the repo
+apps/api/.env
+apps/web/.env.local
+
+# ─── Build outputs ───────────────────────────────────────────────────────────
+dist/
+build/
+*.tsbuildinfo
+
+# ─── IDE ─────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ─── Docker ──────────────────────────────────────────────────────────────────
+# Keep docker-compose files but ignore local override secrets
+docker-compose.override.local.yml
+
+# ─── Test artefacts ──────────────────────────────────────────────────────────
+playwright-report/
+test-results/
+apps/web/coverage/
+apps/api/htmlcov/
+
+# ─── Generated ───────────────────────────────────────────────────────────────
+packages/api-types/src/generated.ts
+
+# Editor extension packages
+*.vsix

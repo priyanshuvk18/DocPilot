@@ -1,0 +1,152 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "docpilot-api"
+version = "0.1.0"
+description = "DocPilot API — AI workspace assistant backend"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+
+dependencies = [
+    # ── Web framework ────────────────────────────────────────────────────────
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.6",
+    "gunicorn>=23.0.0",
+    "python-multipart>=0.0.12",   # form/file uploads
+
+    # ── Validation & config ──────────────────────────────────────────────────
+    "pydantic>=2.9.2",
+    "pydantic-settings>=2.5.2",
+
+    # ── Database ─────────────────────────────────────────────────────────────
+    "sqlalchemy>=2.0.36",
+    "alembic>=1.13.3",
+    "asyncpg>=0.29.0",             # async Postgres driver
+
+    # ── Cache / queue ────────────────────────────────────────────────────────
+    "redis[hiredis]>=5.1.1",
+    "arq>=0.26.1",                 # async Redis queue (ARQ workers)
+
+    # ── Auth ─────────────────────────────────────────────────────────────────
+    "PyJWT>=2.9.0",
+    "cryptography>=43.0.3",
+    "httpx>=0.27.2",               # JWKS fetch + MCP calls
+
+    # ── AI — LLM ────────────────────────────────────────────────────────────
+    "anthropic>=0.34.2",
+
+    # ── AI — Embeddings & rerank ─────────────────────────────────────────────
+    "voyageai>=0.3.0",
+
+    # ── RAG framework ────────────────────────────────────────────────────────
+    "llama-index-core>=0.11.22",
+    "llama-index-readers-file>=0.2.2",
+
+    # ── Document parsing ─────────────────────────────────────────────────────
+    "pymupdf>=1.24.13",            # PDF parsing (layout-aware)
+    "python-docx>=1.1.2",          # DOCX parsing
+    "chardet>=5.2.0",              # encoding detection for TXT/MD
+
+    # ── Object storage ───────────────────────────────────────────────────────
+    "boto3>=1.35.36",              # S3-compatible (Supabase Storage / MinIO)
+
+    # ── Observability ────────────────────────────────────────────────────────
+    "structlog>=24.4.0",
+    "sentry-sdk[fastapi]>=2.14.0",
+    "langfuse>=2.22.2",
+    "opentelemetry-sdk>=1.27.0",
+    "opentelemetry-exporter-otlp>=1.27.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=5.0.0",
+    "pytest-mock>=3.14.0",
+    "ruff>=0.7.0",
+    "mypy>=1.11.2",
+    "types-boto3>=1.0.2",
+    "testcontainers[postgres,redis]>=4.8.1",
+    "faker>=30.0.0",
+]
+evals = [
+    "ragas>=0.1.21",
+    "deepeval>=1.4.7",
+]
+security = [
+    "bandit>=1.7.10",
+    "pip-audit>=2.7.3",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+# ─── Ruff (linter + formatter) ───────────────────────────────────────────────
+[tool.ruff]
+line-length  = 100
+target-version = "py312"
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "S",    # flake8-bandit (basic security)
+    "ANN",  # flake8-annotations (type hints)
+    "RUF",  # ruff-specific
+]
+ignore = [
+    "ANN101",  # missing self annotation
+    "ANN102",  # missing cls annotation
+    "S101",    # use of assert (needed in tests)
+    "B008",    # function call in argument default (FastAPI Depends)
+]
+per-file-ignores = { "tests/**" = ["S", "ANN"] }
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+# ─── Mypy ─────────────────────────────────────────────────────────────────────
+[tool.mypy]
+python_version        = "3.12"
+strict                = true
+ignore_missing_imports = true
+plugins               = ["pydantic.mypy"]
+exclude               = ["tests/", "alembic/"]
+
+[tool.pydantic-mypy]
+init_forbid_extra  = true
+init_typed         = true
+warn_required_dynamic_aliases = true
+
+# ─── Pytest ───────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths    = ["tests"]
+addopts      = "-v --tb=short --strict-markers"
+markers = [
+    "unit:        fast unit tests with no external dependencies",
+    "integration: requires running Postgres and Redis",
+    "evals:       requires LLM API keys; not run in standard CI",
+    "security:    security-focused tests",
+]
+
+# ─── Coverage ─────────────────────────────────────────────────────────────────
+[tool.coverage.run]
+source   = ["app"]
+omit     = ["tests/*", "alembic/*"]
+branch   = true
+
+[tool.coverage.report]
+show_missing = true
+fail_under   = 70

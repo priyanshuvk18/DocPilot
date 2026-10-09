@@ -1,0 +1,24 @@
+{
+  "name": "docpilot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DocPilot — AI workspace assistant monorepo",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint",
+    "type-check": "pnpm --filter web type-check",
+    "test": "pnpm --filter web test",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "generate-types": "bash scripts/generate-types.sh",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yaml,css}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "turbo": "^2.1.3"
+  }
+}
