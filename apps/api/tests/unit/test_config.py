@@ -29,9 +29,10 @@ def test_settings_auth_disabled_false_by_default(monkeypatch: pytest.MonkeyPatch
     """AUTH_DISABLED defaults to False (safe default)."""
     monkeypatch.delenv("AUTH_DISABLED", raising=False)
     from importlib import reload
+
     from app.core import config
     reload(config)
-    assert config.Settings().auth_disabled is False
+    assert config.Settings(_env_file=None).auth_disabled is False
 
 
 @pytest.mark.unit

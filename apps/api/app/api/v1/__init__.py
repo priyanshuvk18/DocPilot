@@ -12,6 +12,7 @@ from app.api.v1 import (
     evals,
     feedback,
     health,
+    tools,
     workspaces,
 )
 
@@ -25,7 +26,8 @@ router.include_router(workspaces.router, prefix="/workspaces", tags=["workspaces
 router.include_router(collections.router, prefix="/collections", tags=["collections"])
 router.include_router(documents.router, prefix="/documents", tags=["documents"])
 router.include_router(chat.router, prefix="/chat", tags=["chat"])
-router.include_router(feedback.router, prefix="/messages", tags=["feedback"])
+router.include_router(feedback.router, tags=["feedback"])
 router.include_router(actions.router, prefix="/actions", tags=["actions"])
-router.include_router(evals.router, prefix="/eval-sets", tags=["evals"])
+router.include_router(evals.router, tags=["evals"])
 router.include_router(analytics.router, prefix="/analytics", tags=["analytics"])
+router.include_router(tools.router, prefix="/tools", tags=["tools"])

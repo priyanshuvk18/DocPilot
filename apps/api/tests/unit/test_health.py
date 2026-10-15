@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import pytest
 from fastapi.testclient import TestClient
-from httpx import AsyncClient
 
 
 @pytest.fixture
@@ -23,6 +22,7 @@ def app():
 
     # Force re-import of settings with test env
     from importlib import reload
+
     from app.core import config
     reload(config)
 
@@ -32,8 +32,9 @@ def app():
 
 @pytest.fixture
 def client(app):
-    """Sync test client."""
-    return TestClient(app)
+    """Sync test client with lifespan triggered."""
+    with TestClient(app) as c:
+        yield c
 
 
 # ─── Liveness probe ───────────────────────────────────────────────────────────

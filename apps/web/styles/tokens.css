@@ -1,0 +1,44 @@
+:root {
+  /* durations */
+  --dur-instant: 90ms;
+  --dur-fast: 160ms;
+  --dur-base: 260ms;
+  --dur-slow: 480ms;
+  --dur-hero: 900ms;
+
+  /* easings */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring-soft: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* depth & shadows */
+  --shadow-rest: 0 1px 2px rgb(0 0 0 / 0.06), 0 4px 12px rgb(0 0 0 / 0.05);
+  --shadow-lift: 0 8px 24px rgb(0 0 0 / 0.12), 0 2px 6px rgb(0 0 0 / 0.08);
+  --accent: #6D5EF6;
+  --accent-glow: rgb(109 94 246 / 0.35);
+
+  --radius: 0.75rem;
+
+  /* Theme variables (Dark default for high-tech instrument feel) */
+  --background: #090B11;
+  --foreground: #F1F3F9;
+  --card: #111420;
+  --card-foreground: #F1F3F9;
+  --border: #202638;
+  --input: #171C2C;
+  --muted: #1A2033;
+  --muted-foreground: #9AA3BA;
+}
+
+.light {
+  --background: #F8F9FC;
+  --foreground: #0F131D;
+  --card: #FFFFFF;
+  --card-foreground: #0F131D;
+  --border: #E2E6F0;
+  --input: #F0F3FA;
+  --muted: #EFF2F8;
+  --muted-foreground: #64708A;
+  --shadow-rest: 0 1px 3px rgb(0 0 0 / 0.08);
+  --shadow-lift: 0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}

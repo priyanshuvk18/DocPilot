@@ -12,8 +12,8 @@ from __future__ import annotations
 
 import time
 import uuid
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 import structlog
 from fastapi import FastAPI, Request, Response
@@ -49,6 +49,13 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         environment=settings.environment,
         auth_disabled=settings.auth_disabled,
     )
+
+    try:
+        from app.db.session import init_db
+        await init_db()
+        logger.info("Database initialized successfully")
+    except Exception as e:
+        logger.warning("Database init encountered warning or skipped", error=str(e))
 
     yield
 
@@ -88,7 +95,7 @@ def create_app() -> FastAPI:
 
     # ── Request-ID + timing middleware ──────────────────────────────────────
     @app.middleware("http")
-    async def request_context_middleware(request: Request, call_next: ...) -> Response:  # type: ignore[type-arg]
+    async def request_context_middleware(request: Request, call_next) -> Response:  
         request_id = request.headers.get("X-Request-Id") or str(uuid.uuid4())
         request.state.request_id = request_id
 
